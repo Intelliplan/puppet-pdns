@@ -1,3 +1,5 @@
+# managed by puppet
+
 setuid=pdns
 setgid=pdns
 local-address=<%= scope.lookupvar('pdns::nameserver::config::listen_address') %>
@@ -11,3 +13,11 @@ gsqlite3-database=/var/pdns/powerdns.sqlite
 <% else -%>
 # Something went wrong. No backend specified!
 <% end -%>
+
+
+# haf:
+# 'hack' to allow public IPs to be resolved
+# the docs are a bit unclear:
+recursor=8.8.8.8 # google's DNS
+allow-recursion=10.0.0.0/16
+lazy-recursion=yes
