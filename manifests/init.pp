@@ -7,5 +7,4 @@ class pdns {
     }
   }
   include pdns::nameserver
-  include pdns::resolver
 }
