@@ -7,6 +7,7 @@ class pdns::resolver::config (
   $nameservers    = $::ipaddress
 ) {
   if $forward_domain {
+    notify { "$forward_domain": } 
     # By default the pdns recursor will not send queries to local addresses
     # but if we are running a local domain then we need to change this to
     # enable queries to our name server

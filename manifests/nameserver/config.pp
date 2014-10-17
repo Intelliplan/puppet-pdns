@@ -2,7 +2,12 @@ class pdns::nameserver::config (
   $backend        = 'sqlite',
   $listen_address = $::ipaddress,
   $forward_domain = undef,
-  $reverse_domain = undef
+  $reverse_domain = undef,
+  $gpsql_user     = 'pdns',
+  $gpsql_dbname   = 'powerdns',
+  $gpsql_host     = '127.0.0.3',
+  $gpsql_password = 'password',
+
 ) {
   if $backend == undef {
     fail('pdns::nameserver::config backend parameter is required')

@@ -12,7 +12,13 @@ class pdns::nameserver(
   $backend        = 'sqlite',
   $forward_domain = undef,
   $reverse_domain = undef,
-  $use_hiera      = true
+  $use_hiera      = true,
+  $gpsql_user     = 'pdns',
+  $gpsql_dbname   = 'powerdns',
+  $gpsql_host     = '127.0.0.88',
+  $gpsql_password = 'password',
+
+
 ) {
   # Only run on RedHat derived systems.
   case $::osfamily {
@@ -25,6 +31,7 @@ class pdns::nameserver(
     $pdns = hiera_hash('pdns', undef)
     if $pdns {
       $nameserver = $pdns['nameserver']
+      notify { $nameserver: }
       if $nameserver {
         class { 'pdns::nameserver::config':
           backend => $nameserver['backend'] ? {
@@ -43,6 +50,22 @@ class pdns::nameserver(
             undef   => $reverse_domain,
             default => $nameserver['reverse_domain'],
           },
+          gpsql_host => $nameserver['gpsql_host'] ? {
+            undef   => $gpsql_host,
+            default => $nameserver['gpsql_host'],
+          },
+          gpsql_password => $nameserver['gpsql_password'] ? {
+            undef   => $gpsql_password,
+            default => $nameserver['gpsql_password'],
+          },
+          gpsql_user => $nameserver['gpsql_user'] ? {
+            undef   => $gpsql_user,
+            default => $nameserver['gpsql_user'],
+          },
+          gpsql_dbname => $nameserver['gpsql_dbname'] ? {
+            undef   => $gpsql_dbname,
+            default => $nameserver['gpsql_dbname'],
+          },
         }
         class { 'pdns::nameserver::install':
           backend        => $nameserver['backend'] ? {
@@ -60,6 +83,10 @@ class pdns::nameserver(
       listen_address => $listen_address,
       forward_domain => $forward_domain,
       reverse_domain => $reverse_domain,
+      gpsql_user     => $gpsql_user,
+      gpsql_dbname   => $gpsql_dbname,
+      gpsql_host     => $gpsql_host,
+      gpsql_password => $gpsql_password,
     }
     class { 'pdns::nameserver::install':
       backend        => $backend,
