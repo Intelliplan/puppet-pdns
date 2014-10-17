@@ -31,7 +31,6 @@ class pdns::nameserver(
     $pdns = hiera_hash('pdns', undef)
     if $pdns {
       $nameserver = $pdns['nameserver']
-      notify { $nameserver: }
       if $nameserver {
         class { 'pdns::nameserver::config':
           backend => $nameserver['backend'] ? {
