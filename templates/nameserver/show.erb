@@ -2,7 +2,7 @@
 <% _backend = scope.lookupvar("pdns::nameserver::config::backend") -%>
 <% if _backend == "postgresql" -%>
 echo 'select name, type, content from records order by type,name;' | \
-su -c 'psql powerdns' postgres
+psql -w -h <%= scope.lookupvar('pdns::nameserver::config::gpsql_host') %>  -U  <%= scope.lookupvar('pdns::nameserver::config::gpsql_user') %> -d  <%= scope.lookupvar('pdns::nameserver::config::gpsql_dbname') %>
 <% elsif @backend == "sqlite" -%>
 printf '.width 30 10 30;\nselect name, type, content from records order by type,name;\n' | \
 sqlite3 -column /var/pdns/powerdns.sqlite
