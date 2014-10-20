@@ -12,7 +12,7 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=/var/pdns/powerdns.sqlite", "", "")
   or die $DBI::errstr . "\n";
 <% elsif scope.lookupvar('pdns::nameserver::config::backend') == 'postgresql' -%>
 # Posgresql
-my $dbh = DBI->connect("dbi:Pg:dbname=powerdns", "", "", {AutoCommit => 1})
+my $dbh = DBI->connect("dbi:Pg:dbname=<%= scope.lookupvar('pdns::nameserver::config::gpsql_dbname') %>;host=<%= scope.lookupvar('pdns::nameserver::config::gpsql_host') %>;port=5432;", "<%= scope.lookupvar('pdns::nameserver::config::gpsql_user') %> ", "<%= scope.lookupvar('pdns::nameserver::config::gpsql_password') %>", {AutoCommit => 1})
   or die $DBI::errstr . "\n";
 <% end -%>
 
@@ -150,6 +150,7 @@ while(<>) {
     print "Adding $type record: name $name, content $content: ";
     if ($current_content) {
       if ($current_content eq $content) {
+        print "$current_content\n";
         print "already exists\n";
       }
       else {
